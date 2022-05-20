@@ -4,10 +4,9 @@ FROM gradle:jdk11 as java_test
 
 WORKDIR /home/gradle/src
 
-COPY --chown=gradle:gradle ./ /home/gradle/src
+COPY ./ ./
 
-RUN gradle build
-#--no-daemon
+RUN gradle build --no-daemon
 #because it's local not CI/CD
 #stage 2
 
