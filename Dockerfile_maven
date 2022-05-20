@@ -1,0 +1,15 @@
+# Stage 1 (to create a "build" image, ~140MB)
+FROM maven:3.6.0-jdk-11-slim AS build
+WORKDIR /home/app/src
+COPY ./ ./
+RUN mvn package
+
+# Stage 2 (to create a downsized "container executable", ~87MB)
+
+FROM adoptopenjdk/openjdk11
+
+COPY --from=build /home/app/src/target/java-docker-build-1.0.0-SNAPSHOT.jar /app/app.jar
+
+RUN ls -ltr
+
+ENTRYPOINT [ "java", "-jar", "app.jar" ]
