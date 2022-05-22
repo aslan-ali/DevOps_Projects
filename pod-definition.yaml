@@ -4,8 +4,7 @@ kind: Pod
 metadata:
   name: spring-pod
   labels:
-    app: spring
-    type: frontend
+    name: spring
 spec:
   containers:
   - name: spring-container
