@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: spring-pod
+  labels:
+    app: spring
+    type: frontend
+spec:
+  containers:
+  - name: spring-container
+    image: netdevopsaslan/test_api
