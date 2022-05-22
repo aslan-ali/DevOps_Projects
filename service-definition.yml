@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-service
+
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 80            #POD's port
+      port: 80           # service's port
+      nodePort: 30008       #node's port ( range 30000-32767)
+  selector:
+    name: spring         #label of POD's, i take it from deployment file , NodeServicePort redirect request to only these PODs which have this labels name:spring
