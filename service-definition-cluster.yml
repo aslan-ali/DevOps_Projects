@@ -1,0 +1,24 @@
+apiVersion: v1    
+kind: Service 
+metadata:
+  name: spring
+
+
+spec: 
+  type: ClusterIP            #typedir what's service we use
+  ports:
+    - targetPort: 80           #target port of group pods
+      port: 80             # port of service
+
+  selector:
+    name: spring           #label for pods
+    
+    
+    # if we have a lot of pods  we can label it for take them to group in this case it's spring 
+    
+    # if we have full stack application front end and backend   
+   # in front end we have 3 pods and in backend also
+   # but which pods we can connect in backend who can help us in this case ?
+   # for this case we use service clusterIP , cluster take the pods to the group with labels like backend and create a one single interface for access to them
+   # and when front end pod want to connect backend he request to the single interface of backend . and ClusterIP service redirect it randomly to backend pods
+   
