@@ -8,3 +8,18 @@ spec:
     image: ubuntu
     command: ["sleep"]             #command replace ENTRYPOINT in dockerfile
     args: ["5000"]                #arguments replace CMD in dockerfile
+
+
+
+apiVersion: v1 
+kind: Pod 
+metadata:
+  name: webapp-green 
+  labels:
+      name: webapp-green 
+spec:
+  containers:
+  - name: simple-webapp
+    image: kodekloud/webapp-color
+    command: ["python", "app.py"]
+    args: ["--color", "green"]
