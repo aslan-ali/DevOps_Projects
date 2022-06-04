@@ -11,3 +11,17 @@ spec:
   signerName: kubernetes.io/kube-apiserver-client
   usages:
   - client auth
+
+
+
+kubectl get csr
+NAME        AGE     SIGNERNAME                                    REQUESTOR                  CONDITION
+akshay      4m49s   kubernetes.io/kube-apiserver-client           kubernetes-admin           Pending
+
+
+kubectl certificate approve akshay            #approved certificate
+
+
+kubectl get csr
+NAME        AGE     SIGNERNAME                                    REQUESTOR                  CONDITION
+akshay      6m24s   kubernetes.io/kube-apiserver-client           kubernetes-admin           Approved,Issued
