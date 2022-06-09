@@ -3,25 +3,24 @@ kind: NetworkPolicy
 metadata:
   name: internal-policy
 spec:
-  PodSelector:
+  podSelector:
     matchLabels:
       name: internal
   policyTypes:
   - Egress
   egress:
-  - to:   
+  - to: 
       - podSelector:
           matchLabels:
             name: payroll
-    port:
+    ports:
       - protocol: TCP
         port: 8080
-        
+
   - to: 
       - podSelector:
           matchLabels:
             name: mysql
-    port:
+    ports:
       - protocol: TCP
         port: 3306
-~                             
