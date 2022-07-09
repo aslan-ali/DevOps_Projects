@@ -1,0 +1,37 @@
+variables:
+  IMAGE_N: netdevopsaslan/my-piton
+  IMAGE_T: new-release-05
+
+stages:
+  - test
+  - build
+  - deploy
+
+run_tests:
+  image: python:3.9-slim-buster
+  stage: test
+  before_script:
+    - apt-get update -y && apt-get install -y make
+  script:
+    - make test
+
+build_image:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u $USERNAME_REGISTRY -p $PASSWD_REGISTRY
+  script:
+    - docker build . -t $IMAGE_N:$IMAGE_T
+    - docker push $IMAGE_N:$IMAGE_T
+
+deploy_process:
+  stage: deploy
+  script:
+    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@IP_ "
+        docker login -u $USERNAME_REGISTRY -p USERNAME_PASSWD &&
+        docker ps -aq | xargs docker stop | xargs docker rm
+        docker run -p 5000:5000 $IMAGE_N:$IMAGE_T"
