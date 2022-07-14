@@ -1,3 +1,9 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH != "main" && $CI_PIPELINE_SOURCE != "merge_request_event"
+      when: never
+    - when: always
+
 variables:
   IMAGE_N: netdevopsaslan/my-piton
   IMAGE_T: new-release-05
@@ -10,6 +16,8 @@ stages:
 run_tests:
   image: python:3.9-slim-buster
   stage: test
+  tags:
+    - docker
   before_script:
     - apt-get update -y && apt-get install -y make
   script:
@@ -17,7 +25,11 @@ run_tests:
 
 build_image:
   stage: build
+  only:
+    - main
   image: docker:20.10.16
+  tags:
+    - docker
   services:
     - docker:20.10.16-dind
   variables:
@@ -30,8 +42,14 @@ build_image:
 
 deploy_process:
   stage: deploy
+  tags:
+    - shell
+  only:
+    - main
+  before_script:
+  - echo "$SSH_KEYS" >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@IP_ "
-        docker login -u $USERNAME_REGISTRY -p USERNAME_PASSWD &&
-        docker ps -aq | xargs docker stop | xargs docker rm
-        docker run -p 5000:5000 $IMAGE_N:$IMAGE_T"
+    - ssh -o StrictHostKeyChecking=no aslan@172.16.8.15 "
+        docker login -u $USERNAME_REGISTRY -p $PASSWD_REGISTRY &&
+        docker run -d -p 5000:5000 $IMAGE_N:$IMAGE_T"
