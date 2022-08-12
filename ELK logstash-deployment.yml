@@ -28,7 +28,7 @@ data:
     }
     output {
         elasticsearch {
-            hosts => [ "dev-efk.expressbank.az:9200" ]
+            hosts => [ "xxxxxxxx:9200" ]
         }
     }
 ---
